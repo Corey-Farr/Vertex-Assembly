@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-inter: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  }
+
+  * {
+    @apply border-neutral-800;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-neutral-950 text-neutral-100 antialiased;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+
+  /* Respect reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Grid overlay utility - can be toggled for design reference */
+  .grid-overlay {
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 2rem 2rem;
+  }
+
+  /* Button styles */
+  .btn {
+    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-medium tracking-wide transition-all duration-300;
+    @apply focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2 focus:ring-offset-neutral-950;
+  }
+
+  .btn-primary {
+    @apply btn bg-accent-600 text-white hover:bg-accent-500 active:bg-accent-700;
+  }
+
+  .btn-secondary {
+    @apply btn border border-neutral-700 bg-transparent text-neutral-300 hover:border-neutral-600 hover:bg-neutral-900;
+  }
+
+  .btn-ghost {
+    @apply btn text-neutral-400 hover:text-neutral-100;
+  }
+
+  /* Container */
+  .container-custom {
+    @apply mx-auto max-w-8xl px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Section spacing */
+  .section {
+    @apply py-24 md:py-32 lg:py-40;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Word spacing utilities for better readability on large text */
+  .word-spacing-normal {
+    word-spacing: 0.1em;
+  }
+
+  .word-spacing-wide {
+    word-spacing: 0.15em;
+  }
+
+  .word-spacing-wider {
+    word-spacing: 0.2em;
+  }
+}
+
