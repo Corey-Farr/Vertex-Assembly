@@ -166,7 +166,3 @@ category: 'Category'
 - Modern browsers (Chrome, Firefox, Safari, Edge)
 - Graceful degradation for older browsers
 - Reduced motion support for accessibility
-
-## License
-
-Private project for Vertex Assembly.
