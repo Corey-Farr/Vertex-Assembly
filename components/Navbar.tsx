@@ -23,7 +23,6 @@ function isActive(href: string, pathname: string) {
 export default function Navbar() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
 
   const navRef = useRef<HTMLElement>(null)
   const mobileMenuRef = useRef<HTMLDivElement>(null)
@@ -34,13 +33,6 @@ export default function Navbar() {
     navItems.forEach((i) => map.set(i.href, isActive(i.href, pathname)))
     return map
   }, [pathname])
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
 
   // Close menu on route changes.
   useEffect(() => {
@@ -119,10 +111,7 @@ export default function Navbar() {
   return (
     <nav
       ref={navRef}
-      className={clsx(
-        'sticky top-0 z-50 transition-colors duration-300',
-        scrolled ? 'bg-neutral-950/70 backdrop-blur-md border-b border-neutral-800' : 'bg-transparent'
-      )}
+      className="fixed top-0 left-0 right-0 z-50 bg-neutral-950/80 backdrop-blur-md border-b border-neutral-800/50"
     >
       <div className="container-custom">
         <div className="flex items-center justify-between h-20">

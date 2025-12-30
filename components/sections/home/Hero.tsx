@@ -301,6 +301,7 @@ export default function Hero() {
 
         if (!isReduced) {
           // Content parallax on scroll
+          // scrub: true for immediate response (no lag)
           gsap.to(content, {
             y: CONTENT_PARALLAX_Y,
             ease: 'none',
@@ -308,18 +309,24 @@ export default function Hero() {
               trigger: section,
               start: 'top top',
               end: 'bottom top',
-              scrub: 1,
+              scrub: true,
             },
           })
 
           // Track scroll progress for WebGL scene
+          // Using a throttled update to avoid excessive re-renders
+          let lastProgress = 0
           ScrollTrigger.create({
             trigger: section,
             start: 'top top',
             end: 'bottom top',
             scrub: true,
             onUpdate: (self) => {
-              setScrollProgress(self.progress)
+              // Only update if progress changed significantly (reduces re-renders)
+              if (Math.abs(self.progress - lastProgress) > 0.01) {
+                lastProgress = self.progress
+                setScrollProgress(self.progress)
+              }
             },
           })
 
@@ -332,7 +339,7 @@ export default function Hero() {
                 trigger: section,
                 start: 'top top',
                 end: 'bottom top',
-                scrub: 1,
+                scrub: true,
               },
             })
           }
@@ -409,7 +416,7 @@ export default function Hero() {
               className="text-lg md:text-xl text-neutral-300 leading-relaxed mb-10 max-w-xl opacity-0"
             >
               We engineer and deploy premium robotic cells that increase throughput, reduce defects,
-              and keep operations running smoothly—shift after shift.
+              and keep operations running smoothly.
             </p>
 
             {/* CTAs */}

@@ -1,5 +1,4 @@
-import Hero from '@/components/sections/home/Hero'
-import Capabilities from '@/components/sections/home/Capabilities'
+import HeroCapabilitiesParallax from '@/components/sections/home/HeroCapabilitiesParallax'
 import SignatureSystems from '@/components/sections/home/SignatureSystems'
 import Process from '@/components/sections/home/Process'
 import FeaturedWork from '@/components/sections/home/FeaturedWork'
@@ -10,8 +9,9 @@ import FinalCTA from '@/components/sections/home/FinalCTA'
 export default function HomePage() {
   return (
     <div className="relative">
-      <Hero />
-      <Capabilities />
+      {/* Hero + Capabilities with parallax overlap effect */}
+      <HeroCapabilitiesParallax />
+      
       <SignatureSystems />
       <Process />
       <FeaturedWork />
@@ -21,4 +21,3 @@ export default function HomePage() {
     </div>
   )
 }
-

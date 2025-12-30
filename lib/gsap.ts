@@ -3,6 +3,7 @@ import { gsap } from 'gsap'
 export const isBrowser = typeof window !== 'undefined'
 
 let scrollTriggerRegistered = false
+let scrollTriggerPromise: Promise<typeof import('gsap/ScrollTrigger').ScrollTrigger> | null = null
 
 export function prefersReducedMotion(): boolean {
   if (!isBrowser) return false
@@ -21,18 +22,34 @@ export function motionDuration(seconds: number): number {
 /**
  * SSR-safe plugin registration. ScrollTrigger is dynamically imported so it
  * never evaluates in a non-browser runtime.
+ * 
+ * Uses a singleton promise to ensure only one import happens even if called
+ * multiple times in parallel.
  */
 export async function ensureScrollTrigger() {
   if (!isBrowser) return null
-  const mod = await import('gsap/ScrollTrigger')
-  const ScrollTrigger = mod.ScrollTrigger
-  if (!scrollTriggerRegistered) {
-    gsap.registerPlugin(ScrollTrigger)
-    scrollTriggerRegistered = true
+  
+  // Return cached promise if already loading/loaded
+  if (scrollTriggerPromise) {
+    return scrollTriggerPromise
   }
-  return ScrollTrigger
+  
+  scrollTriggerPromise = import('gsap/ScrollTrigger').then((mod) => {
+    const ScrollTrigger = mod.ScrollTrigger
+    if (!scrollTriggerRegistered) {
+      gsap.registerPlugin(ScrollTrigger)
+      scrollTriggerRegistered = true
+    }
+    return ScrollTrigger
+  })
+  
+  return scrollTriggerPromise
+}
+
+// Pre-load ScrollTrigger immediately on module load (browser only)
+// This ensures it's ready by the time components need it
+if (isBrowser) {
+  ensureScrollTrigger()
 }
 
 export { gsap }
-
-

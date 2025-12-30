@@ -18,50 +18,41 @@ export default function PageTransition({ children }: { children: React.ReactNode
 
     if (prefersReducedMotion()) {
       setRendered(children)
-      gsap.set(el, { opacity: 1, y: 0 })
+      gsap.set(el, { opacity: 1 })
       lastPathRef.current = pathname
       firstRef.current = false
       return
     }
 
-    // First paint: only fade/slide in.
+    // First paint: only fade in (no y transform to avoid scroll interference)
     if (firstRef.current) {
       setRendered(children)
-      gsap.set(el, { opacity: 0, y: 14 })
+      gsap.set(el, { opacity: 0 })
       gsap.to(el, {
         opacity: 1,
-        y: 0,
-        duration: motionDuration(0.55),
+        duration: motionDuration(0.5),
         ease: 'power2.out',
-        onComplete: () => {
-          // Important: clear transforms so ScrollTrigger pinning (fixed) isn't broken
-          // by a transformed ancestor. This prevents pinned sections from “disappearing”.
-          gsap.set(el, { clearProps: 'transform' })
-        },
       })
       lastPathRef.current = pathname
       firstRef.current = false
       return
     }
 
-    // Route change: fade out old content, swap, then fade in.
+    // Route change: fade out old content, swap, then fade in
     if (lastPathRef.current !== pathname) {
       const tl = gsap.timeline()
       tl.to(el, {
         opacity: 0,
-        y: -10,
-        duration: motionDuration(0.22),
+        duration: motionDuration(0.2),
         ease: 'power1.inOut',
       })
         .add(() => setRendered(children))
-        .set(el, { opacity: 0, y: 14 })
+        .set(el, { opacity: 0 })
         .to(el, {
           opacity: 1,
-          y: 0,
-          duration: motionDuration(0.45),
+          duration: motionDuration(0.4),
           ease: 'power2.out',
         })
-        .set(el, { clearProps: 'transform' })
 
       lastPathRef.current = pathname
       return () => {
@@ -69,15 +60,13 @@ export default function PageTransition({ children }: { children: React.ReactNode
       }
     }
 
-    // Same route; just update.
+    // Same route; just update
     setRendered(children)
   }, [pathname, children])
 
   return (
-    <div ref={containerRef} className="will-change-transform">
+    <div ref={containerRef}>
       {rendered}
     </div>
   )
 }
-
-

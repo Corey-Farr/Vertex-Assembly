@@ -241,100 +241,89 @@ export default function Capabilities() {
         const isReduced = prefersReducedMotion()
 
         // =====================================================================
-        // Title line-stagger animation
-        // Tweak: TITLE_STAGGER, TITLE_DURATION, TITLE_DELAY
+        // All animations triggered by a single ScrollTrigger on the section
+        // This works better with parallax since the section enters earlier
         // =====================================================================
         const TITLE_STAGGER = 0.06
         const TITLE_DURATION = 0.65
-        const TITLE_DELAY = 0.1
-
-        if (!isReduced) {
-          const { elements, restore } = applySplitText(title, 'words', 'cap-title')
-          splitRestore = restore
-
-          gsap.set(elements, { opacity: 0, y: 30, rotateX: -10 })
-
-          gsap.to(elements, {
-            opacity: 1,
-            y: 0,
-            rotateX: 0,
-            duration: TITLE_DURATION,
-            stagger: TITLE_STAGGER,
-            delay: TITLE_DELAY,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: title,
-              start: 'top 85%',
-              once: true,
-            },
-          })
-        } else {
-          gsap.set(title, { opacity: 1 })
-        }
-
-        // =====================================================================
-        // Subtitle fade
-        // =====================================================================
-        if (subtitle) {
-          if (isReduced) {
-            gsap.set(subtitle, { opacity: 1, y: 0 })
-          } else {
-            gsap.fromTo(
-              subtitle,
-              { opacity: 0, y: 16 },
-              {
-                opacity: 1,
-                y: 0,
-                duration: motionDuration(0.5),
-                delay: 0.3,
-                ease: 'power2.out',
-                scrollTrigger: {
-                  trigger: subtitle,
-                  start: 'top 85%',
-                  once: true,
-                },
-              }
-            )
-          }
-        }
-
-        // =====================================================================
-        // Cards: clip-path wipe + opacity + slight parallax
-        // Tweak: CARD_STAGGER, CARD_DURATION, CARD_PARALLAX_Y
-        // =====================================================================
         const CARD_STAGGER = 0.15
         const CARD_DURATION = 0.7
         const CARD_PARALLAX_Y = 40
 
-        if (cardsContainer) {
-          const cards = cardsContainer.querySelectorAll('[data-capability-card]')
-
-          if (isReduced) {
-            gsap.set(cards, { opacity: 1, clipPath: 'inset(0 0 0 0)' })
-          } else {
-            // Initial state
-            gsap.set(cards, {
-              opacity: 0,
-              y: CARD_PARALLAX_Y,
-              clipPath: 'inset(0 100% 0 0)', // Hidden from right
-            })
-
-            // Animate in
-            gsap.to(cards, {
-              opacity: 1,
-              y: 0,
-              clipPath: 'inset(0 0% 0 0)', // Reveal from left
-              duration: CARD_DURATION,
-              stagger: CARD_STAGGER,
-              ease: 'power3.out',
-              scrollTrigger: {
-                trigger: cardsContainer,
-                start: 'top 80%',
-                once: true,
-              },
-            })
-          }
+        // Set initial states
+        let titleElements: Element[] = []
+        if (!isReduced) {
+          const { elements, restore } = applySplitText(title, 'words', 'cap-title')
+          splitRestore = restore
+          titleElements = elements
+          gsap.set(elements, { opacity: 0, y: 30, rotateX: -10 })
         }
+
+        if (subtitle && !isReduced) {
+          gsap.set(subtitle, { opacity: 0, y: 16 })
+        }
+
+        const cards = cardsContainer?.querySelectorAll('[data-capability-card]')
+        if (cards && !isReduced) {
+          gsap.set(cards, {
+            opacity: 0,
+            y: CARD_PARALLAX_Y,
+            clipPath: 'inset(0 100% 0 0)',
+          })
+        }
+
+        if (isReduced) {
+          // Just show everything for reduced motion
+          gsap.set(title, { opacity: 1 })
+          if (subtitle) gsap.set(subtitle, { opacity: 1, y: 0 })
+          if (cards) gsap.set(cards, { opacity: 1, clipPath: 'inset(0 0 0 0)' })
+          return
+        }
+
+        // Single trigger for all animations - fires when section top hits bottom of viewport
+        ScrollTrigger.create({
+          trigger: section,
+          start: 'top bottom', // As soon as section enters viewport
+          once: true,
+          onEnter: () => {
+            // Title animation
+            if (titleElements.length) {
+              gsap.to(titleElements, {
+                opacity: 1,
+                y: 0,
+                rotateX: 0,
+                duration: TITLE_DURATION,
+                stagger: TITLE_STAGGER,
+                delay: 0.1,
+                ease: 'power3.out',
+              })
+            }
+
+            // Subtitle animation
+            if (subtitle) {
+              gsap.to(subtitle, {
+                opacity: 1,
+                y: 0,
+                duration: 0.5,
+                delay: 0.3,
+                ease: 'power2.out',
+              })
+            }
+
+            // Cards animation
+            if (cards) {
+              gsap.to(cards, {
+                opacity: 1,
+                y: 0,
+                clipPath: 'inset(0 0% 0 0)',
+                duration: CARD_DURATION,
+                stagger: CARD_STAGGER,
+                delay: 0.4,
+                ease: 'power3.out',
+              })
+            }
+          },
+        })
       }, section)
     }
 
@@ -348,7 +337,7 @@ export default function Capabilities() {
   }, [])
 
   return (
-    <Section id="capabilities" className="bg-neutral-900/20">
+    <Section id="capabilities" className="bg-neutral-950">
       <section ref={sectionRef}>
         <div className="container-custom">
           {/* Header */}
