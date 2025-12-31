@@ -232,6 +232,7 @@ export default function Capabilities() {
     let ctx: gsap.Context | null = null
     let splitRestore: (() => void) | null = null
     let killed = false
+    let eventHandler: (() => void) | null = null
 
     const setup = async () => {
       const ScrollTrigger = await ensureScrollTrigger()
@@ -280,49 +281,61 @@ export default function Capabilities() {
           return
         }
 
-        // Single trigger for all animations - fires when section top hits bottom of viewport
+        // Animation function - triggered by HeroCapabilitiesParallax via custom event
+        const playAnimations = () => {
+          // Title animation
+          if (titleElements.length) {
+            gsap.to(titleElements, {
+              opacity: 1,
+              y: 0,
+              rotateX: 0,
+              duration: TITLE_DURATION,
+              stagger: TITLE_STAGGER,
+              ease: 'power3.out',
+            })
+          }
+
+          // Subtitle animation - starts slightly after title begins
+          if (subtitle) {
+            gsap.to(subtitle, {
+              opacity: 1,
+              y: 0,
+              duration: 0.5,
+              delay: 0.2,
+              ease: 'power2.out',
+            })
+          }
+
+          // Cards animation - starts after text
+          if (cards) {
+            gsap.to(cards, {
+              opacity: 1,
+              y: 0,
+              clipPath: 'inset(0 0% 0 0)',
+              duration: CARD_DURATION,
+              stagger: CARD_STAGGER,
+              delay: 0.35,
+              ease: 'power3.out',
+            })
+          }
+        }
+
+        // Listen for event from HeroCapabilitiesParallax (fires early based on scroll progress)
+        let hasPlayed = false
+        const handleTrigger = () => {
+          if (hasPlayed) return
+          hasPlayed = true
+          playAnimations()
+        }
+        eventHandler = handleTrigger
+        window.addEventListener('capabilities-animate', handleTrigger)
+
+        // Fallback: also trigger on section entering viewport (for direct navigation)
         ScrollTrigger.create({
           trigger: section,
-          start: 'top bottom', // As soon as section enters viewport
+          start: 'top 90%',
           once: true,
-          onEnter: () => {
-            // Title animation
-            if (titleElements.length) {
-              gsap.to(titleElements, {
-                opacity: 1,
-                y: 0,
-                rotateX: 0,
-                duration: TITLE_DURATION,
-                stagger: TITLE_STAGGER,
-                delay: 0.1,
-                ease: 'power3.out',
-              })
-            }
-
-            // Subtitle animation
-            if (subtitle) {
-              gsap.to(subtitle, {
-                opacity: 1,
-                y: 0,
-                duration: 0.5,
-                delay: 0.3,
-                ease: 'power2.out',
-              })
-            }
-
-            // Cards animation
-            if (cards) {
-              gsap.to(cards, {
-                opacity: 1,
-                y: 0,
-                clipPath: 'inset(0 0% 0 0)',
-                duration: CARD_DURATION,
-                stagger: CARD_STAGGER,
-                delay: 0.4,
-                ease: 'power3.out',
-              })
-            }
-          },
+          onEnter: handleTrigger,
         })
       }, section)
     }
@@ -333,6 +346,9 @@ export default function Capabilities() {
       killed = true
       splitRestore?.()
       ctx?.revert()
+      if (eventHandler) {
+        window.removeEventListener('capabilities-animate', eventHandler)
+      }
     }
   }, [])
 

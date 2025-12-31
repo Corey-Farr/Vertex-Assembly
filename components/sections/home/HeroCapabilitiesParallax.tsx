@@ -92,6 +92,22 @@ export default function HeroCapabilitiesParallax() {
             scrub: true,
           },
         })
+
+        // Trigger Capabilities animations at ~40% of parallax scroll
+        // At this point, capabilities section is visually entering the viewport
+        let hasTriggered = false
+        ScrollTrigger.create({
+          trigger: wrap,
+          start: 'top top',
+          end: '+=100%',
+          onUpdate: (self) => {
+            // Fire at 40% progress - capabilities section is now visible
+            if (!hasTriggered && self.progress >= 0.5) {
+              hasTriggered = true
+              window.dispatchEvent(new CustomEvent('capabilities-animate'))
+            }
+          },
+        })
       }, wrap)
     }
 

@@ -311,7 +311,7 @@ export default function Process() {
         // Tweak: PIN_DISTANCE controls how long the pin lasts (in vh)
         // =====================================================================
         mm.add('(min-width: 768px)', () => {
-          const PIN_DISTANCE = 400 // vh
+          const PIN_DISTANCE = 2000 // vh
           const stepPanels = panels.querySelectorAll('[data-step-panel]')
           const stepIndicators = pinContainer.querySelectorAll('[data-step-indicator]')
 
@@ -335,7 +335,7 @@ export default function Process() {
               end: `+=${PIN_DISTANCE}vh`,
               pin: true,
               pinType: 'transform',
-              scrub: 1,
+              scrub: .5,
               anticipatePin: 1,
               invalidateOnRefresh: true,
               onUpdate: (self) => {
@@ -369,7 +369,7 @@ export default function Process() {
             tl.to(prevPanel, {
               opacity: 0,
               scale: 0.9,
-              duration: 0.15,
+              duration: 0.1,
               ease: 'power2.in',
             }, startAt - 0.05)
 
@@ -377,7 +377,7 @@ export default function Process() {
             tl.to(currentPanel, {
               opacity: 1,
               scale: 1,
-              duration: 0.15,
+              duration: 0.1,
               ease: 'power2.out',
             }, startAt)
           })
@@ -432,11 +432,11 @@ export default function Process() {
         {/* Desktop Layout */}
         <div
           ref={pinContainerRef}
-          className="hidden md:block min-h-screen relative z-10 bg-neutral-950"
+          className="hidden md:flex flex-col justify-center min-h-screen relative z-10 bg-neutral-950"
         >
-          <div className="container-custom py-20">
+          <div className="container-custom">
             {/* Section header */}
-            <div className="mb-16">
+            <div className="mb-12">
               <div className="text-xs font-semibold uppercase tracking-[0.28em] text-accent-400/80 mb-4">
                 Our Process
               </div>

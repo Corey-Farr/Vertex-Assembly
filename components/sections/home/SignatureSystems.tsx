@@ -8,10 +8,21 @@ import { ensureScrollTrigger, gsap, prefersReducedMotion, motionDuration } from 
 // System Data
 // ============================================================================
 
+type SpecType = 'performance' | 'operational' | 'config' | 'reliability'
+
 interface SystemSpec {
   label: string
   value: number
   suffix: string
+  type: SpecType
+}
+
+// Color classes for each spec type (matches the legend)
+const specColors: Record<SpecType, { number: string; suffix: string }> = {
+  performance: { number: 'text-accent-400', suffix: 'text-accent-400/70' },
+  operational: { number: 'text-primary-400', suffix: 'text-primary-400/70' },
+  config: { number: 'text-neutral-400', suffix: 'text-neutral-400/70' },
+  reliability: { number: 'text-green-400', suffix: 'text-green-400/70' },
 }
 
 interface System {
@@ -29,9 +40,9 @@ const systems: System[] = [
     description:
       'A self-contained robotic assembly cell that fits in tight footprints while delivering high-mix flexibility.',
     specs: [
-      { label: 'Cycle', value: 6, suffix: 's' },
-      { label: 'Axes', value: 6, suffix: '' },
-      { label: 'Payload', value: 12, suffix: 'kg' },
+      { label: 'Cycle', value: 6, suffix: 's', type: 'performance' },
+      { label: 'Axes', value: 6, suffix: '', type: 'config' },
+      { label: 'Payload', value: 12, suffix: 'kg', type: 'operational' },
     ],
     gradient: 'from-accent-600/40 via-accent-700/30 to-primary-800/40',
   },
@@ -41,9 +52,9 @@ const systems: System[] = [
     description:
       'Multi-camera inspection platform with edge inference, catching defects in-line before they propagate.',
     specs: [
-      { label: 'Latency', value: 35, suffix: 'ms' },
-      { label: 'Cameras', value: 8, suffix: '' },
-      { label: 'Accuracy', value: 99.8, suffix: '%' },
+      { label: 'Latency', value: 35, suffix: 'ms', type: 'performance' },
+      { label: 'Cameras', value: 8, suffix: '', type: 'config' },
+      { label: 'Accuracy', value: 99.8, suffix: '%', type: 'reliability' },
     ],
     gradient: 'from-primary-600/40 via-primary-700/30 to-accent-800/40',
   },
@@ -53,9 +64,9 @@ const systems: System[] = [
     description:
       'Intelligent conveyor segments with built-in buffering and automatic re-routing to minimize idle time.',
     specs: [
-      { label: 'Speed', value: 45, suffix: 'm/min' },
-      { label: 'Zones', value: 24, suffix: '' },
-      { label: 'Uptime', value: 99.2, suffix: '%' },
+      { label: 'Speed', value: 45, suffix: 'm/min', type: 'performance' },
+      { label: 'Zones', value: 24, suffix: '', type: 'config' },
+      { label: 'Uptime', value: 99.2, suffix: '%', type: 'reliability' },
     ],
     gradient: 'from-accent-500/40 via-primary-600/30 to-accent-800/40',
   },
@@ -65,9 +76,9 @@ const systems: System[] = [
     description:
       'High-speed palletizing with mixed-SKU pattern optimization and integrated stretch-wrap sequencing.',
     specs: [
-      { label: 'Rate', value: 28, suffix: 'cpm' },
-      { label: 'Reach', value: 3.2, suffix: 'm' },
-      { label: 'Layers', value: 12, suffix: '' },
+      { label: 'Rate', value: 28, suffix: 'cpm', type: 'performance' },
+      { label: 'Reach', value: 3.2, suffix: 'm', type: 'operational' },
+      { label: 'Layers', value: 12, suffix: '', type: 'config' },
     ],
     gradient: 'from-primary-500/40 via-accent-600/30 to-primary-800/40',
   },
@@ -122,26 +133,29 @@ function SystemCard({ system, index }: SystemCardProps) {
 
         {/* Specs row with count-up numbers */}
         <div className="flex gap-6 pt-5 border-t border-neutral-800">
-          {system.specs.map((spec, specIdx) => (
-            <div key={spec.label} className="flex-1">
-              <div className="text-[10px] font-medium uppercase tracking-[0.2em] text-neutral-500 mb-1">
-                {spec.label}
+          {system.specs.map((spec, specIdx) => {
+            const colors = specColors[spec.type]
+            return (
+              <div key={spec.label} className="flex-1">
+                <div className="text-[10px] font-medium uppercase tracking-[0.2em] text-neutral-500 mb-1">
+                  {spec.label}
+                </div>
+                <div className="flex items-baseline gap-0.5">
+                  <span
+                    data-spec-number
+                    data-value={spec.value}
+                    data-suffix={spec.suffix}
+                    data-card-index={index}
+                    data-spec-index={specIdx}
+                    className={`text-lg font-bold tabular-nums ${colors.number}`}
+                  >
+                    0
+                  </span>
+                  <span className={`text-sm ${colors.suffix}`}>{spec.suffix}</span>
+                </div>
               </div>
-              <div className="flex items-baseline gap-0.5">
-                <span
-                  data-spec-number
-                  data-value={spec.value}
-                  data-suffix={spec.suffix}
-                  data-card-index={index}
-                  data-spec-index={specIdx}
-                  className="text-lg font-bold text-accent-400 tabular-nums"
-                >
-                  0
-                </span>
-                <span className="text-sm text-accent-400/70">{spec.suffix}</span>
-              </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </div>
@@ -234,7 +248,7 @@ export default function SignatureSystems() {
           }
 
           // Pin and scrub horizontal movement
-          const PIN_DURATION_MULTIPLIER = 1.2 // Adjust for faster/slower scroll
+          const PIN_DURATION_MULTIPLIER = 1.1 // Adjust for faster/slower scroll
 
           gsap.to(track, {
             x: () => -getScrollDistance(),
@@ -250,17 +264,23 @@ export default function SignatureSystems() {
               anticipatePin: 1,
               invalidateOnRefresh: true,
               onUpdate: (self) => {
-                // Trigger count-up when card reaches center
+                // Trigger count-up when card reaches center or is visible on screen
                 const cards = track.querySelectorAll('[data-system-card]')
                 const centerX = window.innerWidth / 2
+                const viewportRight = window.innerWidth
 
                 cards.forEach((card) => {
                   const cardRect = card.getBoundingClientRect()
                   const cardCenter = cardRect.left + cardRect.width / 2
                   const distanceFromCenter = Math.abs(cardCenter - centerX)
 
-                  // If card is near center (within 200px), trigger its count-up
-                  if (distanceFromCenter < 200) {
+                  // Trigger count-up if:
+                  // 1. Card is near center (within 200px), OR
+                  // 2. Card is visible and scroll is > 80% complete (for last cards)
+                  const isNearCenter = distanceFromCenter < 200
+                  const isVisibleAndNearEnd = self.progress > 0.8 && cardRect.left < viewportRight && cardRect.right > 0
+
+                  if (isNearCenter || isVisibleAndNearEnd) {
                     const specNumbers = card.querySelectorAll('[data-spec-number]')
                     specNumbers.forEach((numEl) => {
                       const el = numEl as HTMLElement
@@ -268,7 +288,6 @@ export default function SignatureSystems() {
                       el.dataset.counted = 'true'
 
                       const endValue = parseFloat(el.dataset.value || '0')
-                      const suffix = el.dataset.suffix || ''
                       const isDecimal = endValue % 1 !== 0
 
                       gsap.to(
