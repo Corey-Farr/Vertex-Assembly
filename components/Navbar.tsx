@@ -96,7 +96,9 @@ export default function Navbar() {
       menuTlRef.current = tl
     } else {
       const tl = gsap.timeline({
-        onComplete: () => gsap.set(menu, { display: 'none' }),
+        onComplete: () => {
+          gsap.set(menu, { display: 'none' })
+        },
       })
       tl.to(menu, {
         height: 0,

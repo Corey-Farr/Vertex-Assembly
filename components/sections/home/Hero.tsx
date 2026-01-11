@@ -95,7 +95,7 @@ function MagneticButton({ href, children, variant = 'primary' }: MagneticButtonP
       const y = e.clientY - rect.top - rect.height / 2
 
       // Tweak: magnetic pull strength
-      const MAGNETIC_STRENGTH = 0.3
+      const MAGNETIC_STRENGTH = 0.05
 
       gsap.to(buttonRef.current, {
         x: x * MAGNETIC_STRENGTH,
@@ -371,17 +371,17 @@ export default function Hero() {
         <div className="absolute -bottom-32 right-1/4 w-[40rem] h-[40rem] bg-primary-500/15 rounded-full blur-[120px]" />
       </div>
 
-      {/* WebGL Scene or Fallback */}
+      {/* WebGL Scene */}
       <div
         ref={sceneContainerRef}
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 pointer-events-none hidden lg:block"
         aria-hidden="true"
       >
         {shouldShowWebGL ? (
           <HeroScene
             scrollProgress={scrollProgress}
             mousePosition={mousePosition}
-            className="absolute inset-0 opacity-70"
+            className="absolute inset-0 w-full h-full"
           />
         ) : (
           <StaticFallback />

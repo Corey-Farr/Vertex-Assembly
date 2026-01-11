@@ -137,12 +137,12 @@ export default function FinalCTA() {
 
             {/* Headline */}
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 word-spacing-wide text-balance">
-              Let's build your next production line.
+              Let&apos;s build your next production line.
             </h2>
 
             {/* Subtext */}
             <p className="text-lg md:text-xl text-neutral-300 mb-12 leading-relaxed max-w-2xl mx-auto">
-              From discovery to deployment, we'll engineer a system that hits your
+              From discovery to deployment, we&apos;ll engineer a system that hits your
               targets for cycle time, quality, and uptime.
             </p>
 
@@ -178,7 +178,7 @@ export default function FinalCTA() {
 
             {/* Trust signal */}
             <p className="mt-8 text-sm text-neutral-500">
-              No commitment required. We'll scope your project and provide a detailed proposal.
+              No commitment required. We&apos;ll scope your project and provide a detailed proposal.
             </p>
           </div>
         </div>

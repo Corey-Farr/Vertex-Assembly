@@ -1,0 +1,126 @@
+---
+title: 'Electronics Manufacturing'
+date: '2024-03-10'
+tags: ['Vision', 'Automation']
+summary: 'Precision assembly systems handling micro-components with sub-millimeter accuracy for high-volume consumer electronics.'
+client: 'Electronics Manufacturer'
+heroImage: '/images/work/electronics-hero.jpg'
+---
+
+## Overview
+
+Precision assembly systems for micro-electronic components requiring sub-millimeter accuracy at production speeds exceeding 10,000 units per hour. This project pushed the boundaries of what's possible in automated micro-assembly.
+
+<Figure caption="High-speed SMT placement in action" aspectRatio="16/9" />
+
+## The Challenge
+
+Consumer electronics manufacturing demands extreme precision at extreme speeds:
+
+- **Component miniaturization** with parts smaller than 0.4mm x 0.2mm
+- **Placement accuracy** requirements of ±25 microns
+- **High-mix production** with frequent changeovers
+- **Defect rates** expected below 10 DPPM
+- **Thermal management** for heat-sensitive components
+
+<Callout type="info" title="Scale of Precision">
+The tolerances required are equivalent to placing a grain of sand with accuracy better than the width of a human hair—thousands of times per hour.
+</Callout>
+
+## Our Solution
+
+We developed an integrated precision assembly platform combining multiple advanced technologies:
+
+### Micro-Precision Robotic Arms
+
+Custom-engineered assembly robots featuring:
+
+- **Linear motor drives** with 1-micron resolution
+- **Active vibration cancellation** systems
+- **Temperature-controlled enclosures** maintaining ±0.1°C
+- **Vision-guided placement** with real-time correction
+
+<Figure caption="Micro-assembly robot with vision alignment system" aspectRatio="4/3" />
+
+### Advanced Vision Systems
+
+Multi-stage inspection ensures quality:
+
+- **Pre-placement inspection** verifying component orientation
+- **Post-placement verification** confirming accurate positioning
+- **Solder joint inspection** using AI-powered analysis
+- **3D surface profiling** for height verification
+
+### Vibration Isolation Platforms
+
+Production floor vibrations are eliminated through:
+
+- **Active isolation tables** with 6-axis compensation
+- **Pneumatic damping** for low-frequency isolation
+- **Seismic sensors** triggering adaptive response
+- **Isolated foundations** for critical stations
+
+### Real-Time Quality Monitoring
+
+Comprehensive SPC implementation:
+
+- **In-line process monitoring** at every station
+- **Statistical process control** with real-time alerts
+- **Automated corrective actions** for drift detection
+- **Complete component traceability** by serial number
+
+<Callout type="note" title="Data-Driven Quality">
+The system captures placement data for every component, enabling correlation analysis that has identified process improvements worth $2M annually in reduced defects.
+</Callout>
+
+## Technical Innovation
+
+### Adaptive Placement Algorithm
+
+Our proprietary placement algorithm adapts in real-time:
+
+```
+1. Capture component image at pickup
+2. Calculate centroid and rotation offset
+3. Cross-reference with placement target
+4. Compute trajectory with vibration prediction
+5. Execute placement with closed-loop correction
+6. Verify placement within 5ms cycle
+```
+
+This approach achieves Cpk values exceeding 2.0 for critical placements.
+
+<Figure caption="Vision system analyzing component placement accuracy" aspectRatio="3/2" />
+
+### Thermal Management
+
+Temperature control prevents coefficient mismatch issues:
+
+- **Substrate preheating** to equalize thermal expansion
+- **Component conditioning** before placement
+- **Environment monitoring** with automatic compensation
+- **Predictive modeling** for thermal drift correction
+
+## Results
+
+The system delivers exceptional performance:
+
+- **Sub-millimeter accuracy** consistently achieved (±18 microns typical)
+- **200% production increase** over previous capabilities
+- **Defect rate below 0.01%** (8 DPPM achieved)
+- **90% reduction** in changeover time through automated recipes
+- **Energy efficiency** improved 35% versus legacy equipment
+
+<Figure caption="Production floor with multiple precision assembly cells" aspectRatio="16/9" />
+
+## Technical Specifications
+
+| Component | Specification |
+|-----------|---------------|
+| Placement Accuracy | ±25 microns (3σ) |
+| Minimum Component | 0201 (0.6mm x 0.3mm) |
+| Placement Speed | 25,000 CPH |
+| Vision Resolution | 5 microns/pixel |
+| Temperature Stability | ±0.1°C |
+| Vibration Isolation | &lt;0.5μm displacement |
+

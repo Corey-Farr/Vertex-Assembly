@@ -1,0 +1,187 @@
+---
+title: 'AI Vision Quality System'
+date: '2023-11-05'
+tags: ['Vision']
+summary: 'Deep learning-powered visual inspection system achieving 99.97% defect detection across 50+ defect categories.'
+client: 'Aerospace Components Manufacturer'
+heroImage: '/images/work/vision-hero.jpg'
+---
+
+## Overview
+
+A deep learning-powered visual inspection system deployed across critical aerospace component manufacturing, capable of detecting defects invisible to human inspectors while maintaining production-line speeds.
+
+<Figure caption="Multi-camera inspection station in operation" aspectRatio="16/9" />
+
+## The Challenge
+
+Aerospace manufacturing has zero tolerance for defects:
+
+- **Safety-critical components** where failures cost lives
+- **Microscopic defects** smaller than human visual acuity
+- **50+ defect categories** requiring simultaneous detection
+- **100% inspection** mandated by aerospace regulations
+- **Speed requirements** matching 6-second takt time
+
+<Callout type="warning" title="Stakes of Failure">
+A single undetected defect in an aerospace component can ground entire aircraft fleets, costing airlines millions per day and potentially endangering passengers.
+</Callout>
+
+## Our Solution
+
+We developed a comprehensive AI-powered inspection platform:
+
+### Multi-Modal Imaging
+
+Different defect types require different imaging approaches:
+
+- **High-resolution visible light** for surface defects
+- **Infrared thermography** for subsurface anomalies
+- **Structured light 3D** for dimensional verification
+- **UV fluorescence** for crack detection
+
+<Figure caption="Multi-spectral imaging capturing different defect signatures" aspectRatio="4/3" />
+
+### Deep Learning Detection
+
+Our neural network architecture achieves superhuman detection:
+
+- **Custom CNN architecture** optimized for industrial inspection
+- **Transfer learning** from 10M+ annotated defect images
+- **Real-time inference** completing analysis in &lt;100ms
+- **Continuous learning** improving from production data
+
+### Defect Classification
+
+The system categorizes across 50+ defect types:
+
+- **Surface defects**: scratches, pits, inclusions, discoloration
+- **Dimensional defects**: warpage, out-of-tolerance features
+- **Structural defects**: cracks, porosity, delamination
+- **Assembly defects**: missing features, incorrect orientation
+
+<Callout type="info" title="Human Augmentation">
+The system doesn't replace human inspectors but augments them, flagging potential issues for human review while ensuring nothing escapes detection.
+</Callout>
+
+### Operator Interface
+
+Inspectors interact through an intuitive interface:
+
+- **Highlighted defect regions** with confidence scores
+- **Defect classification** with reference examples
+- **One-click acceptance/rejection** workflow
+- **Audit trail** for every inspection decision
+
+<Figure caption="Inspector reviewing AI-flagged potential defects" aspectRatio="16/9" />
+
+## Technical Architecture
+
+### Processing Pipeline
+
+```
+Image Acquisition (5 cameras, 20MP each)
+         │
+         ▼
+Pre-processing (distortion correction, normalization)
+         │
+         ▼
+AI Inference (4x NVIDIA A100 GPUs)
+         │
+         ▼
+Post-processing (confidence thresholding, NMS)
+         │
+         ▼
+Decision Output (pass/fail/review)
+         │
+         ▼
+Logging & Traceability
+```
+
+### Model Performance
+
+| Metric | Performance |
+|--------|-------------|
+| Detection Rate | 99.97% |
+| False Positive Rate | &lt;0.1% |
+| Inference Time | 85ms |
+| Throughput | 10 parts/minute |
+
+<Callout type="success" title="Exceeding Human Performance">
+In blind testing against expert human inspectors, the AI system detected 23% more defects while generating 60% fewer false alarms.
+</Callout>
+
+## Training Methodology
+
+### Data Collection
+
+Building the training dataset required extensive effort:
+
+- **Historical defect library** of 500,000+ annotated images
+- **Synthetic defect generation** for rare defect types
+- **Expert annotation** by certified inspection personnel
+- **Continuous augmentation** from production discoveries
+
+### Model Development
+
+Iterative development over 8 months:
+
+- **Architecture exploration** testing 15+ network designs
+- **Hyperparameter optimization** using Bayesian methods
+- **Ensemble methods** combining multiple model strengths
+- **Edge case hardening** with adversarial training
+
+<Figure caption="Training data visualization showing defect distribution" aspectRatio="3/2" />
+
+### Validation Protocol
+
+Rigorous validation ensures production readiness:
+
+- **Cross-validation** across multiple production batches
+- **Temporal validation** testing on future production data
+- **Sensitivity analysis** for edge cases
+- **Regulatory review** with aerospace quality authorities
+
+## Implementation
+
+### Hardware Deployment
+
+Each inspection station includes:
+
+- **5 high-resolution cameras** (20MP, global shutter)
+- **Precision lighting array** with programmable angles
+- **Part positioning system** with &lt;10μm repeatability
+- **GPU compute unit** for local inference
+- **Network connection** for model updates and logging
+
+### Integration
+
+Seamless integration with existing systems:
+
+- **MES integration** for production scheduling
+- **Quality system** for defect tracking and analysis
+- **ERP connection** for material disposition
+- **Calibration management** for measurement traceability
+
+<Figure caption="System architecture showing integration points" aspectRatio="16/9" />
+
+## Results
+
+The deployment transformed quality operations:
+
+- **99.97% defect detection** across all categories
+- **75% reduction** in inspection labor costs
+- **Zero escapes** to customer in 18 months
+- **30% faster** than previous inspection methods
+- **ROI achieved** in 11 months
+
+## Client Testimonial
+
+> "The Vertex Assembly vision system has fundamentally changed how we think about quality. We've gone from sampling-based inspection to true 100% inspection, and our escape rate has dropped to effectively zero."
+
+— *VP of Quality Assurance*
+
+<Callout type="note" title="Continuous Improvement">
+The system continues to learn from production data, with model updates deployed quarterly that consistently improve detection performance.
+</Callout>
+
